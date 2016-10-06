@@ -1,0 +1,207 @@
+
+/*
+balanced paranthesis
+
+  Created on: Oct 1, 2016
+      Author: Sri Sai Chaitanya Karumuri
+*/
+
+
+#include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string>
+#include <conio.h>
+using namespace std;
+struct item
+{
+	char data;
+	item *pre;
+
+};
+class Stack
+{
+public:
+	Stack();
+	bool Push(char str);     //pushes an item to stack
+	bool Pop();                //removes the most recently added one
+	string has(char str);   // checks an item is present in the stack
+	void ListStack();
+	unsigned short getSize();
+	void check(string);      // checks whether the string
+	bool validstr(string);
+
+private:
+
+	item *last;
+	unsigned short size;
+};
+Stack::Stack()
+{
+	last = NULL;
+	size = 0;
+}
+bool Stack::validstr(string st)
+{
+	for (int i = 0; i < st.length(); i++)
+	{
+		if ((st[i] == '[' )||(st[i] == ']') ||(st[i] == '{' )|| (st[i] == '}' )||(st[i] == '(') ||(st[i] == ')' )||(st[i] == '<') ||(st[i] == '>'))
+		{
+		
+		}
+		else
+		{
+			return false;
+		}
+	}
+	return true;
+}
+bool Stack::Push(char str)
+{
+	item *addItem = new item;
+	if (addItem == NULL)return false;
+	addItem->data = str;
+	addItem->pre = NULL;
+	if (last == NULL)
+	{
+		last = addItem;
+		size++;
+		return(true);
+	}
+	else
+	{
+		addItem->pre = last;
+		last = addItem;
+		size++;
+		return(true);
+	}
+}
+void Stack::ListStack()
+{
+	item *it = last;
+	while (it != NULL)
+	{
+		cout << it->data << " ";
+		it = it->pre;
+	}
+}
+unsigned short Stack::getSize()
+{
+	return size;
+}
+string Stack::has(char str)
+{
+	item *it = last;
+	while (it != NULL)
+	{
+		if (it->data == str)	return "Yes";
+		it = it->pre;
+	}
+	return "No";
+}
+bool Stack::Pop()
+{
+	if (last == NULL)
+	{
+		cout << "stack is empty";
+		return false;
+	}
+	item *tbr = last;
+	last = last->pre;
+	size--;
+	delete tbr;
+	return true;
+}
+void Stack::check(string st)
+{
+	
+	
+
+	char str;
+
+	for (int i = 0; i <st.length(); i++)
+	{
+		if (last == NULL) {
+			Push(st[i]);
+		}
+		else
+		{
+			switch (st[i]) 
+			{
+
+			case ']': 
+				if (last->data == '[')
+				{
+					Pop();
+				}
+				else
+				{
+					Push(st[i]);
+				}
+				break;       
+			case ')':
+				if (last->data == '(')
+				{
+					Pop();
+				}
+				else
+				{
+					Push(st[i]);
+				}
+				break;
+			case '>':
+				if (last->data == '<')
+				{
+					Pop();
+				}
+				else
+				{
+					Push(st[i]);
+				}
+				break;
+			case '}':
+				if (last->data == '{')
+				{
+					Pop();
+				}
+				else
+				{
+					Push(st[i]);
+				}
+				break;
+			default:
+				Push(st[i]);
+				break;
+			}
+		}
+	}
+	if (last == NULL)
+	{
+		cout << "true"<<endl;
+	}
+	else
+	{
+		cout << "false"<<endl;
+	}
+
+}
+
+int main()
+{
+	Stack s;
+	string stri;
+	cout << "enter the string:";
+	cin >> stri;
+	if (s.validstr(stri))
+	{
+		s.check(stri);
+	}
+	else
+	{
+		cout << "invalid string";
+	}
+	system("pause");
+
+}
+
+
